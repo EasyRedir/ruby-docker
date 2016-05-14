@@ -48,6 +48,7 @@ RUN buildDeps=' \
 	&& ./configure --disable-install-doc \
 	&& make -j"$(nproc)" \
 	&& make install \
+  && gem update --system \
 	&& rm -r /usr/src/ruby \
 	&& apt-get purge -y --auto-remove $buildDeps
 
@@ -58,7 +59,7 @@ RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 1.12.2
+ENV BUNDLER_VERSION 1.12.3
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
