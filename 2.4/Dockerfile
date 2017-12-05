@@ -2,8 +2,7 @@ FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-  && apt-get update \
+RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		tzdata \
 		apt-transport-https \
@@ -19,7 +18,9 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
 		build-essential \
 		git \
 		libpq-dev \
-		nodejs \
+  && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends nodejs \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV RUBY_MAJOR 2.4
