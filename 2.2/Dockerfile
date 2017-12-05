@@ -2,9 +2,10 @@ FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+  && apt-get update \
 	&& apt-get install -y --no-install-recommends \
-		tzdata \	
+		tzdata \
 		apt-transport-https \
 		bzip2 \
 		ca-certificates \
@@ -22,7 +23,7 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV RUBY_MAJOR 2.2
-ENV RUBY_VERSION 2.2.7
+ENV RUBY_VERSION 2.2.8
 
 # some of ruby's build scripts are written in ruby
 # we purge this later to make sure our final image uses what we just built
@@ -61,7 +62,7 @@ RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 1.14.6
+ENV BUNDLER_VERSION 1.16.0
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
