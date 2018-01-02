@@ -23,8 +23,8 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends nodejs \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV RUBY_MAJOR 2.3
-ENV RUBY_VERSION 2.3.6
+ENV RUBY_MAJOR 2.5
+ENV RUBY_VERSION 2.5.0
 
 # some of ruby's build scripts are written in ruby
 # we purge this later to make sure our final image uses what we just built
@@ -52,7 +52,6 @@ RUN buildDeps=' \
 	&& ./configure --disable-install-doc \
 	&& make -j"$(nproc)" \
 	&& make install \
-  && gem update --system \
 	&& rm -r /usr/src/ruby \
 	&& apt-get purge -y --auto-remove $buildDeps
 
