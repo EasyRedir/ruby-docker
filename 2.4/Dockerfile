@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		tzdata \
+		locales \
 		apt-transport-https \
 		bzip2 \
 		ca-certificates \
@@ -22,6 +23,9 @@ RUN apt-get update \
   && apt-get update \
   && apt-get install -y --no-install-recommends nodejs \
 	&& rm -rf /var/lib/apt/lists/*
+
+RUN locale-gen en_US.UTF-8
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ENV RUBY_MAJOR 2.4
 ENV RUBY_VERSION 2.4.3
