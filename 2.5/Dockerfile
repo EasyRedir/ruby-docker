@@ -19,7 +19,7 @@ RUN apt-get update \
 		build-essential \
 		git \
 		libpq-dev \
-  && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+  && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
   && apt-get update \
   && apt-get install -y --no-install-recommends nodejs \
 	&& rm -rf /var/lib/apt/lists/*
@@ -66,7 +66,7 @@ RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 1.16.1
+ENV BUNDLER_VERSION 1.16.2
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
