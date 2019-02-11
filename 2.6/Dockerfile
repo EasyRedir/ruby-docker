@@ -19,7 +19,7 @@ RUN apt-get update \
 		build-essential \
 		git \
 		libpq-dev \
-  && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+  && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
   && apt-get update \
   && apt-get install -y --no-install-recommends nodejs \
 	&& rm -rf /var/lib/apt/lists/*
@@ -27,8 +27,8 @@ RUN apt-get update \
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-ENV RUBY_MAJOR 2.3
-ENV RUBY_VERSION 2.3.8
+ENV RUBY_MAJOR 2.6
+ENV RUBY_VERSION 2.6.1
 
 # some of ruby's build scripts are written in ruby
 # we purge this later to make sure our final image uses what we just built
@@ -56,7 +56,6 @@ RUN buildDeps=' \
 	&& ./configure --disable-install-doc \
 	&& make -j"$(nproc)" \
 	&& make install \
-  && gem update --system \
 	&& rm -r /usr/src/ruby \
 	&& apt-get purge -y --auto-remove $buildDeps
 
@@ -67,7 +66,7 @@ RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 1.17.1
+ENV BUNDLER_VERSION 2.0.1
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
