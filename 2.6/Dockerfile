@@ -10,15 +10,21 @@ RUN apt-get update \
 		bzip2 \
 		ca-certificates \
 		curl \
+		patch \
 		libffi-dev \
-		libgdbm3 \
+		libgdbm-dev \
+		libgmp-dev \
 		libssl-dev \
 		libyaml-dev \
 		procps \
 		zlib1g-dev \
+		libncurses5-dev \
 		build-essential \
 		git \
 		libpq-dev \
+		libffi-dev \
+		libreadline6-dev \
+		gnupg \
 	&& curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 	&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
   && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
@@ -65,6 +71,9 @@ RUN buildDeps=' \
 
 # skip installing gem documentation
 RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
+
+# Update Rubygems
+RUN gem update --system
 
 # install things globally, for great justice
 ENV GEM_HOME /usr/local/bundle
