@@ -79,7 +79,7 @@ RUN gem update --system
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 2.1.1
+ENV BUNDLER_VERSION 2.1.4
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
