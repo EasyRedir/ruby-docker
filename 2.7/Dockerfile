@@ -37,8 +37,8 @@ RUN apt-get update \
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-ENV RUBY_MAJOR 2.6
-ENV RUBY_VERSION 2.6.6
+ENV RUBY_MAJOR 2.7
+ENV RUBY_VERSION 2.7.1
 
 # some of ruby's build scripts are written in ruby
 # we purge this later to make sure our final image uses what we just built
