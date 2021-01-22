@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -24,6 +24,7 @@ RUN apt-get update \
 		libpq-dev \
 		libffi-dev \
 		libreadline6-dev \
+		libjemalloc-dev \
 		gnupg \
 	&& curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 	&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
@@ -63,7 +64,7 @@ RUN buildDeps=' \
 		| tar -xjC /usr/src/ruby --strip-components=1 \
 	&& cd /usr/src/ruby \
 	&& autoconf \
-	&& ./configure --disable-install-doc \
+	&& ./configure --with-jemalloc --enable-shared --disable-install-doc \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& rm -r /usr/src/ruby \
@@ -79,7 +80,7 @@ RUN gem update --system
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 2.1.4
+ENV BUNDLER_VERSION 2.2.6
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
