@@ -38,8 +38,8 @@ RUN apt-get update \
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-ENV RUBY_MAJOR 2.6
-ENV RUBY_VERSION 2.6.9
+ENV RUBY_MAJOR 3.0
+ENV RUBY_VERSION 3.0.3
 
 # some of ruby's build scripts are written in ruby
 # we purge this later to make sure our final image uses what we just built
@@ -60,8 +60,8 @@ RUN buildDeps=' \
 	&& apt-get install -y --no-install-recommends $buildDeps \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& mkdir -p /usr/src/ruby \
-	&& curl -SL "http://cache.ruby-lang.org/pub/ruby/$RUBY_MAJOR/ruby-$RUBY_VERSION.tar.bz2" \
-		| tar -xjC /usr/src/ruby --strip-components=1 \
+	&& curl -SL "http://cache.ruby-lang.org/pub/ruby/$RUBY_MAJOR/ruby-$RUBY_VERSION.tar.xz" \
+		| tar -xJC /usr/src/ruby --strip-components=1 \
 	&& cd /usr/src/ruby \
 	&& autoconf \
 	&& ./configure --with-jemalloc --enable-shared --disable-install-doc \
