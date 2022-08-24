@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -28,7 +28,7 @@ RUN apt-get update \
 		gnupg \
 	&& curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn.gpg \
 	&& echo "deb [signed-by=/usr/share/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-  && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+  && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
 		nodejs \
@@ -37,6 +37,26 @@ RUN apt-get update \
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
+ENV OPENSSL_VERSION 1.1.1q
+RUN buildDeps=' \
+		autoconf \
+	' \
+	&& set -x \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends $buildDeps \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& mkdir -p /usr/src/openssl \
+	&& curl -SL "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" | tar -xzC /usr/src/openssl --strip-components=1 \
+  	&& cd /usr/src/openssl \
+  	&& ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl \
+	&& make -j"$(nproc)" \
+	&& make test \
+	&& make install \
+	&& rm -rf /usr/local/openssl/certs \
+	&& ln -s /etc/ssl/certs /usr/local/openssl/certs \
+	&& rm -r /usr/src/openssl \
+	&& apt-get purge -y --auto-remove $buildDeps
 
 ENV RUBY_MAJOR 2.7
 ENV RUBY_VERSION 2.7.6
@@ -64,7 +84,7 @@ RUN buildDeps=' \
 		| tar -xjC /usr/src/ruby --strip-components=1 \
 	&& cd /usr/src/ruby \
 	&& autoconf \
-	&& ./configure --with-jemalloc --enable-shared --disable-install-doc \
+	&& ./configure --with-jemalloc --enable-shared --disable-install-doc --with-openssl-dir=/usr/local/openssl \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& rm -r /usr/src/ruby \
@@ -80,7 +100,7 @@ RUN gem update --system
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
-ENV BUNDLER_VERSION 2.3.14
+ENV BUNDLER_VERSION 2.3.20
 
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
