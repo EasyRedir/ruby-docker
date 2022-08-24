@@ -83,7 +83,6 @@ RUN buildDeps=' \
 	&& curl -SL "http://cache.ruby-lang.org/pub/ruby/$RUBY_MAJOR/ruby-$RUBY_VERSION.tar.bz2" \
 		| tar -xjC /usr/src/ruby --strip-components=1 \
 	&& cd /usr/src/ruby \
-	&& autoconf \
 	&& ./configure --with-jemalloc --enable-shared --disable-install-doc --with-openssl-dir=/usr/local/openssl \
 	&& make -j"$(nproc)" \
 	&& make install \
