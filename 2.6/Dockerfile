@@ -51,7 +51,6 @@ RUN buildDeps=' \
   	&& cd /usr/src/openssl \
   	&& ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl \
 	&& make -j"$(nproc)" \
-	&& make TESTS=-test_afalg test \
 	&& make install \
 	&& rm -rf /usr/local/openssl/certs \
 	&& ln -s /etc/ssl/certs /usr/local/openssl/certs \
