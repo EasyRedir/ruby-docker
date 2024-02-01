@@ -1,0 +1,7 @@
+steps:
+  - label: ":docker: Build and Push to ECR"
+    plugins:
+      - docker-compose#v4.16.0:
+          push:
+            - ruby-3.1:720370802031.dkr.ecr.us-west-2.amazonaws.com/ruby:3.1.4
+          cli-version: 2
