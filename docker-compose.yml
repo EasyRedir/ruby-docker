@@ -4,3 +4,6 @@ services:
     build:
       context: .
       dockerfile: 3.1/Dockerfile
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
