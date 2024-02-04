@@ -6,14 +6,16 @@ ENV DEBIAN_FRONTEND noninteractive
 # Define versions via environment variables
 ENV BUNDLER_VERSION 2.5.5
 ENV PG_MAJOR_VERSION 16
-ENV NODE_MAJOR_VERSION 18
+ENV NODE_MAJOR_VERSION 20
 
 # Install dependencies necessary to build native gems and install other packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         lsb-release \
+        apt-transport-https \
+        ca-certificates \
         curl \
-	    gpg \
+	    gnupg \
 	&& rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/archives/*.deb \
     && rm -rf /tmp/*
@@ -25,8 +27,7 @@ RUN gem install bundler --version "$BUNDLER_VERSION" \
     && rm -rf /usr/local/bundle/cache/*
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash - \
-    && apt-get update \
+RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash - \
     && apt-get install -y --no-install-recommends \
 	    nodejs \
     && corepack enable \
@@ -35,7 +36,7 @@ RUN curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR_VERSION.x | bash - \
     && rm -rf /tmp/*
 
 # Install PostgreSQL client
-RUN curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /usr/share/keyrings/postgresql.gpg \
+RUN curl -fsS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /usr/share/keyrings/postgresql.gpg \
     && sh -c 'echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list' \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
