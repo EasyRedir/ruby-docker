@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   ruby-3.3:
+    image: 720370802031.dkr.ecr.us-west-2.amazonaws.com/ruby:3.3
     build:
       context: .
       dockerfile: 3.3/Dockerfile
