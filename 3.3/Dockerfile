@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ruby:3.3-slim-bookworm
+FROM public.ecr.aws/docker/library/ruby:3.3-slim-bookworm
 
 ENV DEBIAN_FRONTEND noninteractive
 
