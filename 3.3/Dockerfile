@@ -8,6 +8,10 @@ ENV BUNDLER_VERSION 2.5.5
 ENV PG_MAJOR_VERSION 16
 ENV NODE_MAJOR_VERSION 20
 
+# Set build information as environment variables
+ENV ER_GIT_COMMIT=$BUILDKITE_COMMIT
+ENV ER_BUILD_NUMBER=$BUILDKITE_BUILD_NUMBER
+
 # Install dependencies necessary to build native gems and install other packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

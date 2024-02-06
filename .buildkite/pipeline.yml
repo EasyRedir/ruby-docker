@@ -1,7 +1,19 @@
 steps:
-  - label: ":docker: Build and Push to ECR"
+  - label: ":docker: Build Ruby images"
+    plugins:
+      - docker-compose#v4.16.0:
+          build:
+            - ruby-3.3
+          args:
+            - BUILDKITE_COMMIT=${BUILDKITE_COMMIT}
+            - BUILDKITE_BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}
+          cli-version: 2
+          propagate-environment: true
+  - wait
+  - label: ":ecr: Push images to ECR"
     plugins:
       - docker-compose#v4.16.0:
           push:
-            - ruby-3.3
+            - ruby-3.3:720370802031.dkr.ecr.us-west-2.amazonaws.com/ruby:3.3
+            - ruby-3.3:720370802031.dkr.ecr.us-west-2.amazonaws.com/ruby:${BUILDKITE_COMMIT}
           cli-version: 2
